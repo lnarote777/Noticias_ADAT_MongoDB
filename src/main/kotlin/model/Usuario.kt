@@ -8,10 +8,12 @@ data class Usuario(
     val _id: String, //email
     val nombre: String,
     val nick: String,
-    val estado: Boolean, //banned /not banned , active / offline
+    val estado: EstadoUsuario , //banned / not banned , active / inactive
     @BsonProperty("telefonos")
     val telf: List<String>,
     val direcion: Direccion
-
-
 )
+
+enum class EstadoUsuario {
+    BANNED, NOT_BANNED, ACTIVE, INACTIVE
+}

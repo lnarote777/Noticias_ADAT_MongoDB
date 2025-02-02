@@ -8,6 +8,6 @@ data class Noticia(
     val cuerpo: String,
     @BsonProperty("fecha_publicacion")
     val fechaPub: Date,
-    val tag: List<String>,
+    val tags: List<String>,
     val user: String
 )

@@ -7,55 +7,66 @@ import org.example.controller.UserController
 class Menu {
     private val noticiaController = NoticiaController()
     private val usuarioController = UserController()
-    private val comentario = ComentarioController()
+    private val comentarioController = ComentarioController()
 
-    fun menuUsuario(){
-        while(true){
+    fun menuUsuario() {
+        while (true) {
             println("---- BIENVENIDO ----")
             println("1 - Registrarse")
-            println("2 - Iniaciar Sesion")
+            println("2 - Iniciar Sesión")
             println("0 - Salir")
             print("Elija una opción -> ")
 
-            val opcion = readln()
-
-            when(opcion){
+            when (readln()) {
                 "1" -> {
                     usuarioController.registerUser()
-                    menuNoticia()
+                    println("Registro exitoso. Ahora inicie sesión.")
                 }
                 "2" -> {
-                    usuarioController.getUser()
-                    menuNoticia()
+                    print("Ingrese su email: ")
+                    val email = readln().trim()
+
+                    val usuario = usuarioController.getUser(email)
+                    if (usuario != null) {
+                        println("Inicio de sesión exitoso. Bienvenido, ${usuario.nombre}!")
+                        menuNoticia()
+                    } else {
+                        println("Error: Usuario no encontrado.")
+                    }
                 }
-                "0" -> break
-                else -> println("Opción no válida")
+                "0" -> {
+                    println("Saliendo del programa...")
+                    return
+                }
+                else -> println("Opción no válida, intente de nuevo.")
             }
+            println("Presione Enter para continuar...")
+            readln()
         }
     }
 
-    private fun menuNoticia(){
-        while(true){
+    private fun menuNoticia() {
+        while (true) {
             println("---- MENÚ NOTICIAS ----")
             println("1 - Publicar noticia")
             println("2 - Buscar noticia")
-            println("3 - Buscar noticias de usuaurio")
-            println("4 - Obtener ultimas noticias")
+            println("3 - Buscar noticias de usuario")
+            println("4 - Obtener últimas noticias")
             println("5 - Añadir comentario a una noticia")
-            println("0 - Salir")
+            println("0 - Volver al menú principal")
             print("Elija una opción -> ")
 
-            val opcion = readln()
-
-            when(opcion){
+            when (readln()) {
                 "1" -> noticiaController.insertNoticia()
                 "2" -> noticiaController.getNoticia()
-                "3" -> noticiaController.getNoticias()
+                "3" -> noticiaController.getNoticiasUsuario()
                 "4" -> noticiaController.getUltimasNoticias()
-                "5" -> comentario.insertComentario()
-                "0" -> break
-                else -> println("Opción no válida")
+                "5" -> comentarioController.insertComentario()
+                "0" -> return
+                else -> println("Opción no válida, intente de nuevo.")
             }
+            println("Presione Enter para continuar...")
+            readln()
         }
     }
 }
