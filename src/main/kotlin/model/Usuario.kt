@@ -12,7 +12,11 @@ data class Usuario(
     @BsonProperty("telefonos")
     val telf: List<String>,
     val direcion: Direccion
-)
+){
+    override fun toString(): String {
+        return "$_id  -  $nick ($nombre)"
+    }
+}
 
 enum class EstadoUsuario {
     BANNED, NOT_BANNED, ACTIVE, INACTIVE

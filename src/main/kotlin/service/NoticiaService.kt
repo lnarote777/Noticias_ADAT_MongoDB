@@ -22,7 +22,7 @@ class NoticiaService {
 
     fun getNoticiasUsuario(email: String): List<Noticia>? {
         return try {
-            val noticias = collection.find(Filters.eq("user", email)).toList()
+            val noticias = collection.find(Filters.eq("user._id", email)).toList()
 
             noticias.ifEmpty {
                 println("No se encontraron noticias para este usuario.")
@@ -51,9 +51,9 @@ class NoticiaService {
         }
     }
 
-    fun deleteNoticia(id: String): Boolean {
+    fun deleteNoticia(titulo: String): Boolean {
         return try {
-            val result = collection.deleteOne(Filters.eq("_id", id))
+            val result = collection.deleteOne(Filters.eq("titulo", titulo))
 
             if (result.deletedCount > 0) {
                 println("Noticia eliminada con éxito.")

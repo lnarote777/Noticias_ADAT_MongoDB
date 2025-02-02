@@ -10,5 +10,13 @@ data class Noticia(
     @BsonProperty("fecha_publicacion")
     val fechaPub: Date = Date(),
     val tags: List<String>,
-    val user: String
-)
+    val user: Usuario
+){
+    override fun toString(): String {
+        return "Titulo: $titulo\n" +
+                "\t$cuerpo\n" +
+                "tags: $tags\n" +
+                "$user  -  $fechaPub\n"
+
+    }
+}

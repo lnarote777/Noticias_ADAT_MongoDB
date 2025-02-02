@@ -9,4 +9,10 @@ data class Comentario(
     val texto: String,
     val fecha: LocalDateTime = LocalDateTime.now()
 
-)
+){
+    override fun toString(): String {
+        return "$usuarioId  -  $fecha\n" +
+                "Noticia: $noticia\n" +
+                "Comentario - $texto\n"
+    }
+}

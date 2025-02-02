@@ -2,6 +2,7 @@ package org.example.controller
 
 import org.example.model.EstadoUsuario
 import org.example.model.Noticia
+import org.example.model.Usuario
 import org.example.service.NoticiaService
 import org.example.service.UserService
 
@@ -41,7 +42,7 @@ class NoticiaController {
             print("Autor (email): ")
             autor = readln()
 
-            if (autor.isEmpty() || !autor.contains("@") || !comprobarAutor(autor)) {
+            if (autor.isEmpty() || !autor.contains("@") || comprobarAutor(autor) == null) {
                 println("El autor debe ser un correo electrónico válido.")
             }else{
                 break
@@ -59,21 +60,24 @@ class NoticiaController {
                 break
             }
         }
+        val usuario = comprobarAutor(autor)
+        if (usuario != null) {
+            val noticia = Noticia(
+                titulo = titulo,
+                cuerpo = cuerpo,
+                tags = tagsInput,
+                user = usuario
+            )
 
-        val noticia = Noticia(
-            titulo = titulo,
-            cuerpo = cuerpo,
-            tags = tagsInput,
-            user = autor
-        )
+            val success = service.insertNoticia(noticia)
 
-        val success = service.insertNoticia(noticia)
-
-        if (success) {
-            println("Noticia publicada con éxito.")
-        } else {
-            println("No se pudo publicar la noticia.")
+            if (success) {
+                println("Noticia publicada con éxito.")
+            } else {
+                println("No se pudo publicar la noticia.")
+            }
         }
+
     }
 
     fun getNoticias() {
@@ -142,14 +146,13 @@ class NoticiaController {
         }
     }
 
-    private fun comprobarAutor(autor: String): Boolean{
-        val usuario = usuarioService.getUser(autor) ?: return false
+    private fun comprobarAutor(autor: String): Usuario?{
+        val usuario = usuarioService.getUser(autor) ?: return null
 
         return when (usuario.estado) {
-            EstadoUsuario.BANNED -> false
-            EstadoUsuario.INACTIVE -> false
-            EstadoUsuario.ACTIVE -> true
-            else -> true
+            EstadoUsuario.BANNED -> null
+            EstadoUsuario.INACTIVE -> null
+            else -> usuario
         }
     }
 

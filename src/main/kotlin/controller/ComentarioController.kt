@@ -3,16 +3,29 @@ package org.example.controller
 import org.example.model.Comentario
 import org.example.service.ComentarioService
 import org.example.service.NoticiaService
+import org.example.service.UserService
 
 class ComentarioController {
 
     private val comentarioService = ComentarioService()
     private val noticiaService = NoticiaService()
+    private val usuarioService = UserService()
     fun insertComentario() {
-        print("Ingrese el nombre de usuario que escribe el comentario: ")
-        val usuarioId = readln().trim()
 
-        print("Ingrese el ID de la noticia a la que desea comentar: ")
+        var usuarioId: String
+        while (true){
+            print("Ingrese el email de usuario que escribe el comentario: ")
+            usuarioId = readln().trim()
+
+            if (usuarioId.isEmpty()) {
+                println("El contenido no puede estar vacío.")
+            }else{
+                break
+            }
+        }
+
+
+        print("Ingrese el título de la noticia a la que desea comentar: ")
         val noticiaId = readln().trim()
 
         print("Ingrese el texto del comentario: ")
@@ -25,7 +38,14 @@ class ComentarioController {
             return
         }
 
-        val comentario = Comentario(usuarioId, noticia, texto)
+        val usuario = usuarioService.getUser(usuarioId)
+
+        if (usuario == null) {
+            println("No se econtró ningún usuario con ese email.")
+            return
+        }
+
+        val comentario = Comentario(usuario.nick, noticia, texto)
 
         val success = comentarioService.insertComentario(comentario)
         if (success) {
