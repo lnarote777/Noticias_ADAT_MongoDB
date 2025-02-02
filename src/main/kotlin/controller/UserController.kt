@@ -11,40 +11,67 @@ class UserController {
 
     fun registerUser() {
         println("Ingrese sus datos")
-        print("Email: ")
-        val email = readln().trim()
-        print("Nombre: ")
-        val nombre = readln().trim()
-        print("Nick: ")
-        val nick = readln().trim()
-        print("Teléfonos (separados por coma y espacio: <telf1, telf2>): ")
-        val telf = readln().split(", ").map { it.trim() }
-        print("Dirección (calle, número, código postal, ciudad, puerta (opcional)): ")
-        val direc = readln().split(", ").map { it.trim() }
 
-        // Validaciones
-        if (email.isBlank() || !email.contains("@")) {
-            println("Error: El email no es válido.")
-            return
-        }
-        if (nombre.isBlank()) {
-            println("Error: El nombre no puede estar vacío.")
-            return
-        }
-        if (nick.isBlank()) {
-            println("Error: El nick no puede estar vacío.")
-            return
-        }
-        if (telf.isEmpty()) {
-            println("Error: Debe ingresar al menos un número de teléfono.")
-            return
-        }
-        if (direc.size < 4) {
-            println("Error: Dirección incompleta. Formato esperado: calle, número, código postal, ciudad, puerta (opcional).")
-            return
+        var email: String
+        while (true) {
+            print("Email: ")
+            email = readln().trim()
+
+            if (email.isBlank() || !email.contains("@")) {
+                println("Error: El email no es válido.")
+            }else{
+                break
+            }
         }
 
-        // Creación de la dirección
+        var nombre : String
+        while (true) {
+            print("Nombre: ")
+            nombre = readln().trim()
+
+            if (nombre.isBlank()) {
+                println("Error: El nombre no puede estar vacío.")
+            }else{
+                break
+            }
+        }
+
+        var nick: String
+        while (true) {
+            print("Nick: ")
+            nick = readln().trim()
+
+            if (nick.isBlank()) {
+                println("Error: El nick no puede estar vacío.")
+            }else{
+                break
+            }
+        }
+
+        var telf: List<String>
+        while (true) {
+            print("Teléfonos (separados por coma y espacio: <telf1, telf2>): ")
+            telf = readln().split(", ").map { it.trim() }
+
+            if (telf.isEmpty()) {
+                println("Error: Debe ingresar al menos un número de teléfono.")
+            }else{
+                break
+            }
+        }
+
+        var direc: List<String>
+        while (true) {
+            print("Dirección (calle, número, código postal, ciudad, puerta (opcional)): ")
+            direc = readln().split(", ").map { it.trim() }
+
+            if (direc.size < 4) {
+                println("Error: Dirección incompleta. Formato esperado: calle, número, código postal, ciudad, puerta (opcional).")
+            }else {
+                break
+            }
+        }
+
         val direccion: Direccion = if (direc.size == 5) {
             Direccion(
                 calle = direc[0],
@@ -62,33 +89,37 @@ class UserController {
             )
         }
 
-        // Creación del usuario
         val newUser = Usuario(
             _id = email,
             nombre = nombre,
             nick = nick,
-            estado = EstadoUsuario.ACTIVE, // Estado por defecto
+            estado = EstadoUsuario.ACTIVE,
             telf = telf,
             direcion = direccion
         )
 
-        // Guardar usuario en la base de datos
-        usuarioService.registerUser(newUser)
-        println("Usuario registrado correctamente.")
+        val result = usuarioService.registerUser(newUser)
+        if (result) {
+            println("Usuario registrado correctamente.")
+        } else {
+            println("Error: El usuario ya existe.")
+        }
     }
 
-    fun getUser(email: String): Usuario? {
-        return usuarioService.buscarPorEmail(email)
+    fun getUser(): Usuario? {
+        print("Email: ")
+        val email = readln().trim()
+        return usuarioService.getUser(email)
     }
 
     fun updateUser(email: String, newUser: Usuario): Boolean {
-        val existeUser = usuarioService.buscarPorEmail(email) ?: return false
+        val existeUser = usuarioService.getUser(email) ?: return false
         usuarioService.updateUser(email, newUser)
         return true
     }
 
     fun deleteUser(email: String) {
-        val usuario = usuarioService.buscarPorEmail(email)
+        val usuario = usuarioService.getUser(email)
         if (usuario != null) {
             usuarioService.deleteUser(email)
             println("Usuario eliminado correctamente.")
@@ -96,7 +127,4 @@ class UserController {
             println("Error: Usuario no encontrado.")
         }
     }
-
-
-
 }
