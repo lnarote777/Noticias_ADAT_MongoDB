@@ -35,7 +35,6 @@ class ComentarioController {
         }
     }
 
-    //arreglar (no funciona)
     fun getComentariosNoticia() {
         println("Indique el título de la noticia: ")
         val noticiaId = readln().trim()
@@ -46,6 +45,7 @@ class ComentarioController {
         }
 
         val comentarios = comentarioService.getComentariosByNoticia(noticiaId)
+
         if (comentarios.isEmpty()) {
             println("No hay comentarios para esta noticia.")
         } else {

@@ -84,15 +84,16 @@ class NoticiaService {
         }
     }
 
-    //arreglar (no funciona)
     fun getNoticiasByTag(tag: String): List<Noticia>? {
         return try {
-            val noticias = collection.find(Filters.elemMatch("tag", Filters.eq(tag))).toList()
+            val noticias = collection.find(Filters.eq("tags", tag)).toList()
 
             noticias.ifEmpty {
                 println("No se encontraron noticias con la etiqueta '$tag'.")
                 null
             }
+
+            noticias
         } catch (e: Exception) {
             println("Error al obtener las noticias por etiqueta: ${e.message}")
             null

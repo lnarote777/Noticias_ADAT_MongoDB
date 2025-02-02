@@ -10,34 +10,54 @@ class NoticiaController {
     private val usuarioService = UserService()
 
     fun insertNoticia()  {
+
         println("Ingrese los datos de la noticia:")
-        print("Título: ")
-        val titulo = readln()
-        print("Cuerpo: ")
-        val cuerpo = readln()
-        print("Autor (email): ")
-        val autor = readln()
-        print("Etiquetas (separadas por coma): ")
-        val tagsInput = readln().split(",").map { it.trim() }
 
-        if (titulo.isEmpty()) {
-            println("El título no puede estar vacío.")
-            return
+        var titulo: String
+        while (true) {
+            print("Título: ")
+            titulo = readln()
+            if (titulo.isEmpty()) {
+                println("El título no puede estar vacío.")
+            }else{
+                break
+            }
         }
 
-        if (cuerpo.isEmpty()) {
-            println("El contenido no puede estar vacío.")
-            return
+        var cuerpo: String
+        while (true) {
+            print("Cuerpo: ")
+            cuerpo = readln()
+
+            if (cuerpo.isEmpty()) {
+                println("El contenido no puede estar vacío.")
+            }else{
+                break
+            }
         }
 
-        if (autor.isEmpty() || !autor.contains("@") || !comprobarAutor(autor)) {
-            println("El autor debe ser un correo electrónico válido.")
-            return
+        var autor: String
+        while (true) {
+            print("Autor (email): ")
+            autor = readln()
+
+            if (autor.isEmpty() || !autor.contains("@") || !comprobarAutor(autor)) {
+                println("El autor debe ser un correo electrónico válido.")
+            }else{
+                break
+            }
         }
 
-        if (tagsInput.isEmpty()) {
-            println("Las etiquetas no pueden estar vacías.")
-            return
+        var tagsInput : List<String>
+        while (true) {
+            print("Etiquetas (separadas por coma): ")
+            tagsInput = readln().split(",").map { it.trim() }
+
+            if (tagsInput.isEmpty()) {
+                println("Las etiquetas no pueden estar vacías.")
+            }else{
+                break
+            }
         }
 
         val noticia = Noticia(

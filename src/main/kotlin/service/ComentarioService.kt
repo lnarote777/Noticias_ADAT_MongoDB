@@ -15,6 +15,6 @@ class ComentarioService {
     }
 
     fun getComentariosByNoticia(noticiaId: String): List<Comentario> {
-        return collection.find(Filters.eq("noticia", noticiaId)).toList()
+        return collection.find(Filters.eq("noticia.titulo", noticiaId)).toList()
     }
 }
