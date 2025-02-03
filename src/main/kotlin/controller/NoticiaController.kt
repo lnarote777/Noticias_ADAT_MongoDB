@@ -43,7 +43,7 @@ class NoticiaController {
             autor = readln()
 
             if (autor.isEmpty() || !autor.contains("@") || comprobarEmail(autor) == null) {
-                println("El autor debe ser un correo electrónico válido.")
+                println("El email del usuario debe ser un correo electrónico válido y el usuario debe estar activo y no estar baneado.")
             }else{
                 break
             }
@@ -152,14 +152,14 @@ class NoticiaController {
     fun getUltimasNoticias(){
         val noticias = service.getUltimasNoticias()
 
-        if (noticias != null) {
-            if (noticias.isEmpty()) {
-                println("No hay noticias recientes.")
-            } else {
-                println("Últimas noticias:")
-                noticias.forEach { println(it) }
-            }
+
+        if (noticias.isNullOrEmpty()) {
+            println("No hay noticias recientes.")
+        } else {
+            println("Últimas noticias:")
+            noticias.forEach { println(it) }
         }
+
     }
 
     fun getNoticiasUsuario() {

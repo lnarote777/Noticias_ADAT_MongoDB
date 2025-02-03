@@ -25,7 +25,6 @@ class NoticiaService {
             val noticias = collection.find(Filters.eq("user._id", email)).toList()
 
             noticias.ifEmpty {
-                println("No se encontraron noticias para este usuario.")
                 null
             }
         } catch (e: Exception) {
@@ -42,7 +41,6 @@ class NoticiaService {
                 .toList()
 
             noticias.ifEmpty {
-                println("No hay noticias disponibles.")
                 null
             }
         } catch (e: Exception) {
@@ -56,10 +54,8 @@ class NoticiaService {
             val result = collection.deleteOne(Filters.eq("titulo", titulo))
 
             if (result.deletedCount > 0) {
-                println("Noticia eliminada con éxito.")
                 true
             } else {
-                println("No se encontró una noticia con ese ID.")
                 false
             }
         } catch (e: Exception) {
@@ -72,12 +68,7 @@ class NoticiaService {
         return try {
             val noticia = collection.find(Filters.eq("titulo", titulo)).firstOrNull()
 
-            if (noticia != null) {
-                noticia
-            } else {
-                println("No se encontró una noticia con ese titulo.")
-                null
-            }
+            noticia
         } catch (e: Exception) {
             println("Error al obtener la noticia: ${e.message}")
             null
@@ -88,9 +79,8 @@ class NoticiaService {
         return try {
             val noticias = collection.find(Filters.eq("tags", tag)).toList()
 
-            noticias.ifEmpty {
-                println("No se encontraron noticias con la etiqueta '$tag'.")
-                null
+            if (noticias.isEmpty()){
+                return null
             }
 
             noticias

@@ -1,6 +1,8 @@
 package org.example.controller
 
 import org.example.model.Comentario
+import org.example.model.EstadoUsuario
+import org.example.model.Usuario
 import org.example.service.ComentarioService
 import org.example.service.NoticiaService
 import org.example.service.UserService
@@ -17,19 +19,32 @@ class ComentarioController {
             print("Ingrese el email de usuario que escribe el comentario: ")
             usuarioId = readln().trim()
 
-            if (usuarioId.isEmpty()) {
-                println("El contenido no puede estar vacío.")
+            if (usuarioId.isEmpty() || comprobarUsuario(usuarioId) == null ) {
+                println("El contenido no puede estar vacío y debe ser un usuario activo.")
             }else{
                 break
             }
         }
 
+        var noticiaId: String
+        while (true){
+            print("Ingrese el título de la noticia a la que desea comentar: ")
+            noticiaId = readln().trim()
 
-        print("Ingrese el título de la noticia a la que desea comentar: ")
-        val noticiaId = readln().trim()
+            if (noticiaId.isEmpty()) {
+                println("Introduce el titulo de la noticia.")
+            }else{
+                break
+            }
+        }
 
         print("Ingrese el texto del comentario: ")
         val texto = readln().trim()
+
+        if (texto.isEmpty()) {
+            println("No se pudo añadir el comentario.")
+            return
+        }
 
         val noticia = noticiaService.getNoticia(noticiaId)
 
@@ -64,12 +79,28 @@ class ComentarioController {
             return
         }
 
+        val noticia = noticiaService.getNoticia(noticiaId)
+        if (noticia == null) {
+            println("La noticia no existe.")
+            return
+        }
+
         val comentarios = comentarioService.getComentariosByNoticia(noticiaId)
 
         if (comentarios.isEmpty()) {
             println("No hay comentarios para esta noticia.")
         } else {
             comentarios.forEach { println(it) }
+        }
+    }
+
+    private fun comprobarUsuario(email: String): Usuario?{
+        val usuario = usuarioService.getUser(email) ?: return null
+
+        return when (usuario.estado) {
+            EstadoUsuario.BANNED -> null
+            EstadoUsuario.INACTIVE -> null
+            else -> usuario
         }
     }
 }

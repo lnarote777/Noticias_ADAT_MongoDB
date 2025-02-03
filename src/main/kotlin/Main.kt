@@ -14,4 +14,5 @@ import java.util.*
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     Menu().menu()
+    ConnectionDB.close()
 }
