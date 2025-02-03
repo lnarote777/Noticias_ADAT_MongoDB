@@ -95,7 +95,7 @@ class UserController {
             nick = nick,
             estado = EstadoUsuario.ACTIVE,
             telf = telf,
-            direcion = direccion
+            direccion = direccion
         )
 
         val result = usuarioService.registerUser(newUser)

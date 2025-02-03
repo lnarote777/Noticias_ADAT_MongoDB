@@ -27,16 +27,9 @@ class UserService {
 
     fun getUser(email: String): Usuario? {
         return try {
-            val usuario = collection.find(Filters.eq("_id", email)).firstOrNull()
-            if (usuario == null) {
-                println("No se encontró un usuario con el correo $email")
-                return null
-            }else{
-                usuario
-            }
+            collection.find(Filters.eq("_id", email)).firstOrNull() ?: return null
         } catch (e: Exception) {
-            println("Error al buscar usuario: ${e::class.simpleName}: ${e.message}")
-            e.printStackTrace() // Imprimir el stacktrace para más detalles
+            println("Error al buscar usuario: ${e.message}")
             null
         }
     }

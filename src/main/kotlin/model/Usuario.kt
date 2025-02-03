@@ -11,7 +11,7 @@ data class Usuario(
     val estado: EstadoUsuario , //banned / not banned , active / inactive
     @BsonProperty("telefonos")
     val telf: List<String>,
-    val direcion: Direccion
+    val direccion: Direccion
 ){
     override fun toString(): String {
         return "$_id  -  $nick ($nombre)"

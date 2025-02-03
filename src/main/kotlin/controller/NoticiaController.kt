@@ -42,7 +42,7 @@ class NoticiaController {
             print("Autor (email): ")
             autor = readln()
 
-            if (autor.isEmpty() || !autor.contains("@") || comprobarAutor(autor) == null) {
+            if (autor.isEmpty() || !autor.contains("@") || comprobarEmail(autor) == null) {
                 println("El autor debe ser un correo electrónico válido.")
             }else{
                 break
@@ -60,7 +60,7 @@ class NoticiaController {
                 break
             }
         }
-        val usuario = comprobarAutor(autor)
+        val usuario = comprobarEmail(autor)
         if (usuario != null) {
             val noticia = Noticia(
                 titulo = titulo,
@@ -80,9 +80,18 @@ class NoticiaController {
 
     }
 
-    fun getNoticias() {
-        println("Indique la etiqueta que desea buscar: ")
-        val tag = readln()
+    fun getNoticiasByTag() {
+        var tag: String
+        while (true){
+            print("Indique la etiqueta que desea buscar: ")
+            tag = readln()
+
+            if (tag.isEmpty()){
+                println("No puede dejar el campo vacío.")
+            }else{
+                break
+            }
+        }
 
         val noticias = service.getNoticiasByTag(tag)
 
@@ -94,9 +103,20 @@ class NoticiaController {
         }
     }
     fun getNoticia() {
-        print("Ingrese el título de la noticia: ")
-        val id = readln()
-        val noticia = service.getNoticia(id)
+
+        var titulo: String
+        while (true) {
+            print("Ingrese el título de la noticia: ")
+            titulo = readln()
+
+            if (titulo.isEmpty()) {
+                println("No puede dejar el campo vacío.")
+            }else{
+                break
+            }
+        }
+
+        val noticia = service.getNoticia(titulo)
 
         if (noticia != null) {
             println("Noticia encontrada:")
@@ -107,10 +127,20 @@ class NoticiaController {
     }
 
     fun deleteNoticias() {
-        print("Ingrese el ID de la noticia a eliminar: ")
-        val id = readln()
 
-        val success = service.deleteNoticia(id)
+        var titulo: String
+        while (true) {
+            print("Ingrese el titulo de la noticia a eliminar: ")
+            titulo = readln()
+
+            if (titulo.isEmpty()) {
+                println("No puede dejar el campo vacío")
+            }else{
+                break
+            }
+        }
+
+        val success = service.deleteNoticia(titulo)
 
         if (success) {
             println("Noticia eliminada con éxito.")
@@ -133,9 +163,18 @@ class NoticiaController {
     }
 
     fun getNoticiasUsuario() {
-        print("Ingrese el email del usuario: ")
-        val email = readln()
 
+        var email: String
+        while (true) {
+            print("Ingrese el email del usuario: ")
+            email = readln()
+
+            if (email.isEmpty() || !email.contains("@") || comprobarEmail(email) == null) {
+                println("Asegurese de introducir un email válido.")
+            }else{
+                break
+            }
+        }
         val noticias = service.getNoticiasUsuario(email)
 
         if (noticias== null) {
@@ -146,8 +185,8 @@ class NoticiaController {
         }
     }
 
-    private fun comprobarAutor(autor: String): Usuario?{
-        val usuario = usuarioService.getUser(autor) ?: return null
+    private fun comprobarEmail(email: String): Usuario?{
+        val usuario = usuarioService.getUser(email) ?: return null
 
         return when (usuario.estado) {
             EstadoUsuario.BANNED -> null
